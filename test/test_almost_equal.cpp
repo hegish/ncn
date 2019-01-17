@@ -22,6 +22,16 @@ namespace {
    }
 
    
+   TEST(ncn_almostequal, small_numeric_limits)
+   {
+      EXPECT_TRUE(almost_equal(numeric_limits<float>::min(), numeric_limits<float>::min(), 2));
+
+      EXPECT_TRUE(almost_equal(numeric_limits<double>::min(), numeric_limits<double>::min(), 2));
+
+      EXPECT_TRUE(almost_equal(numeric_limits<long double>::min(), numeric_limits<long double>::min(), 2));
+   }
+
+   
    TEST(ncn_almostequal, big_numeric_limits)
    {
       EXPECT_TRUE(almost_equal(numeric_limits<float>::max(), numeric_limits<float>::max(), 2));
@@ -29,6 +39,15 @@ namespace {
    }
    
    
+   TEST(ncn_almostequal, smallnums)
+   {
+      EXPECT_TRUE(almost_equal(0.2, 0.2, 2));
+      EXPECT_TRUE(almost_equal(0.2000000F, 0.20000001F, 2));
+
+      EXPECT_TRUE(almost_equal(2.0e-38F, 2.0e-38F, 2));
+   }
+
+
    TEST(ncn_almostequal, bignums)
    {
       EXPECT_TRUE(almost_equal(2.0e38F, 2.0e38F, 2));
