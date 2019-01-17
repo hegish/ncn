@@ -13,10 +13,8 @@ template<typename T> bool almost_equal(T x, T y, int ulp)
    if( isnan(x) || isnan(y) )
       return false;
    
-   if( abs(x-y) <= abs(numeric_limits<T>::epsilon()*x+numeric_limits<T>::epsilon()*y) * ulp )
-      return true;
-   
-   return abs(x-y) < numeric_limits<T>::min(); // see if result is subnormal
+   // before comparison, the machine epsilon has to be scaled to the magnitude of the values and multiplied by the required precision in units in the last place (ULP)
+   return abs(x-y) <= abs(numeric_limits<T>::epsilon()*x+numeric_limits<T>::epsilon()*y) * ulp;
 }
 // explicitly create template definitions
 template bool almost_equal(float x, float y, int ulp);

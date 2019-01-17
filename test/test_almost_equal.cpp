@@ -28,8 +28,10 @@ namespace {
       EXPECT_FALSE(almost_equal(numeric_limits<float>::min()*1.11, numeric_limits<float>::min()*1.14, 2));
 
       EXPECT_TRUE(almost_equal(numeric_limits<double>::min(), numeric_limits<double>::min(), 2));
+      EXPECT_FALSE(almost_equal(numeric_limits<double>::min()*1.11, numeric_limits<double>::min()*1.14, 2));
 
       EXPECT_TRUE(almost_equal(numeric_limits<long double>::min(), numeric_limits<long double>::min(), 2));
+      EXPECT_FALSE(almost_equal(numeric_limits<long double>::min()*1.11, numeric_limits<long double>::min()*1.14, 2));
    }
 
    
