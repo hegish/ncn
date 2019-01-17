@@ -25,6 +25,7 @@ namespace {
    TEST(ncn_almostequal, small_numeric_limits)
    {
       EXPECT_TRUE(almost_equal(numeric_limits<float>::min(), numeric_limits<float>::min(), 2));
+      EXPECT_FALSE(almost_equal(numeric_limits<float>::min()*1.11, numeric_limits<float>::min()*1.14, 2));
 
       EXPECT_TRUE(almost_equal(numeric_limits<double>::min(), numeric_limits<double>::min(), 2));
 
@@ -43,8 +44,12 @@ namespace {
    {
       EXPECT_TRUE(almost_equal(0.2, 0.2, 2));
       EXPECT_TRUE(almost_equal(0.2000000F, 0.20000001F, 2));
+      EXPECT_FALSE(almost_equal(0.200000L, 0.2000001L, 2));
 
       EXPECT_TRUE(almost_equal(2.0e-38F, 2.0e-38F, 2));
+      EXPECT_FALSE(almost_equal(2.1e-37F, 2.4e-37F, 2));
+
+      EXPECT_FALSE(almost_equal(2.1e-4930L, 2.4e-4930L, 2));
    }
 
 
