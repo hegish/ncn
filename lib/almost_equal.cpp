@@ -1,11 +1,30 @@
+#include "almost_equal.h"
 #include <cmath>
 #include <limits>
 #include <type_traits>
 #include <algorithm>
 
-#include "almost_equal.h"
-
 using namespace std;
+
+
+template<typename T> bool almost_equal_vectors(std::vector<T> x, std::vector<T> y, unsigned int ulp)
+{
+   if(x.size() != y.size())
+      return false;
+   
+   for(int i = 0; i < x.size(); i++)
+   {
+      if(!almost_equal(x[i], y[i], ulp))
+         return false;
+   }
+   
+   return true;
+}
+// explicitly create template definitions
+template bool almost_equal_vectors(std::vector<float> x, std::vector<float> y, unsigned int ulp);
+template bool almost_equal_vectors(std::vector<double> x, std::vector<double> y, unsigned int ulp);
+template bool almost_equal_vectors(std::vector<long double> x, std::vector<long double> y, unsigned int ulp);
+
 
 template<typename T> bool almost_equal(T x, T y, unsigned int ulp)
 {

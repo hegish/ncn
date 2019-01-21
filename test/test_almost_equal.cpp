@@ -8,6 +8,16 @@ using namespace std;
 
 namespace {
 
+   TEST(ncn_almostequalvectors, simple)
+   {
+      vector<float> a = {1.0F,2.0F};
+      vector<float> b = {1.0F,2.1F};
+
+      EXPECT_TRUE(almost_equal_vectors(a, a, 2));
+      EXPECT_FALSE(almost_equal_vectors(a, b, 2));
+   }
+
+
    TEST(ncn_almostequal, simpledoubles)
    {
       double d1 = 0.2;
