@@ -8,7 +8,7 @@ using namespace netCDF;
 
 namespace ncn
 {
-   void read_data(const std::string filepath, const std::string varname, const std::vector<size_t>& indices, const std::vector<size_t>& sizes, std::vector<float>& data)
+   template<typename T> void read_data(const std::string filepath, const std::string varname, const std::vector<size_t>& indices, const std::vector<size_t>& sizes, std::vector<T>& data)
    {
       if(indices.size() != sizes.size())
       {
@@ -52,4 +52,8 @@ namespace ncn
 
       delete ncf;
    }
+
+   // explicitly instantiate the templates for every type we need
+   template void read_data(const std::string filepath, const std::string varname, const std::vector<size_t>& indices, const std::vector<size_t>& sizes, std::vector<float>& data);
+   template void read_data(const std::string filepath, const std::string varname, const std::vector<size_t>& indices, const std::vector<size_t>& sizes, std::vector<double>& data);
 }

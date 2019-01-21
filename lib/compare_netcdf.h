@@ -6,7 +6,7 @@
 
 namespace ncn
 {
-   void read_data(const std::string filepath, const std::string varname, const std::vector<size_t>& indices, const std::vector<size_t>& sizes, std::vector<float>& data);
+   template<typename T> void read_data(const std::string filepath, const std::string varname, const std::vector<size_t>& indices, const std::vector<size_t>& sizes, std::vector<T>& data);
 }
 
 #endif
