@@ -2,12 +2,27 @@
 #include <netcdf>
 #include <sstream>
 #include <numeric>
+#include "almost_equal.h"
 
 using namespace std;
 using namespace netCDF;
 
 namespace ncn
 {
+   bool almost_equal_netcdf_data(const std::string filepath_a, const std::string varname_a, const std::vector<size_t>& indices_a, const std::vector<size_t>& sizes_a, const std::string filepath_b, const std::string varname_b, const std::vector<size_t>& indices_b, const std::vector<size_t>& sizes_b)
+   {
+      // TODO: this is hard coded for float comparison. how to neatly select the right data type?
+
+      vector<float> data_a;
+      ncn::read_data(filepath_a, varname_a, indices_a, sizes_a, data_a);
+
+      vector<float> data_b;
+      ncn::read_data(filepath_b, varname_b, indices_b, sizes_b, data_b);
+      
+      return almost_equal_vectors(data_a, data_b, 2);
+   }
+   
+   
    template<typename T> void read_data(const std::string filepath, const std::string varname, const std::vector<size_t>& indices, const std::vector<size_t>& sizes, std::vector<T>& data)
    {
       if(indices.size() != sizes.size())
@@ -44,6 +59,8 @@ namespace ncn
          msg<<__FILE__<<":"<<__LINE__<<" "<<filepath<<" "<<varname<<" has <"<<var.getDimCount()<<"> dimensions but we got indices for <"<<sizes.size()<<"> dimensions";
          throw std::runtime_error(msg.str());
       }
+      
+      // TODO: should we check the data type of the netcdf variable against our data vector?
 
       // read everything in one go, as we assume we do not read too big amounts of data here
       // e.g. for 10 years 3 hourly data we would have 29216 timesteps, which would require about 234 kB of storage if we would read 1 double value for each timestep
