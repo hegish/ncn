@@ -28,4 +28,12 @@ namespace {
       EXPECT_FLOAT_EQ(-2.84166586F, data[1]);
    }
    
+   
+   TEST(ncn_compare, throws_if_expecting_double_but_got_float)
+   {
+      vector<double> data;
+      EXPECT_THROW(ncn::read_data(fixture_dir+"/tos.nc", "tos", {0,0}, {2,1}, data),
+                   std::runtime_error);
+   }
+
 }  // namespace

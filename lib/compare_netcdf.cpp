@@ -3,6 +3,7 @@
 #include <sstream>
 #include <numeric>
 #include "almost_equal.h"
+#include "netcdf_traits.h"
 
 using namespace std;
 using namespace netCDF;
@@ -60,7 +61,15 @@ namespace ncn
          throw std::runtime_error(msg.str());
       }
       
-      // TODO: should we check the data type of the netcdf variable against our data vector?
+      // check the data type of the netcdf variable against our data vector type
+      NcType expected_type = nctype_trait<T>();
+      NcType actual_type = var.getType();
+      if(expected_type != actual_type)
+      {
+         std::stringstream msg;
+         msg<<__FILE__<<":"<<__LINE__<<" data types do not match, expected: <"<<expected_type.getName()<<"> got: <"<<actual_type.getName()<<">";
+         throw std::runtime_error(msg.str());
+      }
 
       // read everything in one go, as we assume we do not read too big amounts of data here
       // e.g. for 10 years 3 hourly data we would have 29216 timesteps, which would require about 234 kB of storage if we would read 1 double value for each timestep
