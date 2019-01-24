@@ -25,7 +25,7 @@ template<typename T> bool almost_equal_vectors(std::vector<T> x, std::vector<T> 
 template<typename T> bool almost_equal(T x, T y, unsigned int ulp)
 {
    // the IEEE standard says that any comparison operation involving a NAN must return false
-   if( isnan(x) || isnan(y) )
+   if( std::isnan(x) || std::isnan(y) ) // there is an issue with the old intel icpc 17.0.2 if we use just plain isnan instead of std::isnan
       return false;
    
    // before comparison, the machine epsilon has to be scaled to the magnitude of the values and multiplied by the required precision in units in the last place (ULP)

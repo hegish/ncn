@@ -12,3 +12,4 @@ target_include_directories(${PROJECT_NAME}
 	INTERFACE ${CMAKE_CURRENT_LIST_DIR}
 	PRIVATE ${NETCDF_CXX_INCLUDE_DIRECTORIES}
 )
+target_compile_options(${PROJECT_NAME} PRIVATE -std=c++11)
