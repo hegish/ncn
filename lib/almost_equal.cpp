@@ -20,10 +20,6 @@ template<typename T> bool almost_equal_vectors(std::vector<T> x, std::vector<T> 
    
    return true;
 }
-// explicitly create template definitions
-template bool almost_equal_vectors(std::vector<float> x, std::vector<float> y, unsigned int ulp);
-template bool almost_equal_vectors(std::vector<double> x, std::vector<double> y, unsigned int ulp);
-template bool almost_equal_vectors(std::vector<long double> x, std::vector<long double> y, unsigned int ulp);
 
 
 template<typename T> bool almost_equal(T x, T y, unsigned int ulp)
@@ -35,7 +31,14 @@ template<typename T> bool almost_equal(T x, T y, unsigned int ulp)
    // before comparison, the machine epsilon has to be scaled to the magnitude of the values and multiplied by the required precision in units in the last place (ULP)
    return abs(x-y) <= abs(numeric_limits<T>::epsilon()*x+numeric_limits<T>::epsilon()*y) * ulp;
 }
+
+
 // explicitly create template definitions
+
+template bool almost_equal_vectors(std::vector<float> x, std::vector<float> y, unsigned int ulp);
+template bool almost_equal_vectors(std::vector<double> x, std::vector<double> y, unsigned int ulp);
+template bool almost_equal_vectors(std::vector<long double> x, std::vector<long double> y, unsigned int ulp);
+
 template bool almost_equal(float x, float y, unsigned int ulp);
 template bool almost_equal(double x, double y, unsigned int ulp);
 template bool almost_equal(long double x, long double y, unsigned int ulp);
