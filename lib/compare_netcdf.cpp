@@ -10,14 +10,12 @@ using namespace netCDF;
 
 namespace ncn
 {
-   bool almost_equal_netcdf_data(const std::string filepath_a, const std::string varname_a, const std::vector<size_t>& indices_a, const std::vector<size_t>& sizes_a, const std::string filepath_b, const std::string varname_b, const std::vector<size_t>& indices_b, const std::vector<size_t>& sizes_b)
+   template<typename T> bool almost_equal_netcdf_data(const std::string filepath_a, const std::string varname_a, const std::vector<size_t>& indices_a, const std::vector<size_t>& sizes_a, const std::string filepath_b, const std::string varname_b, const std::vector<size_t>& indices_b, const std::vector<size_t>& sizes_b)
    {
-      // TODO: this is hard coded for float comparison. how to neatly select the right data type?
-
-      vector<float> data_a;
+      vector<T> data_a;
       ncn::read_data(filepath_a, varname_a, indices_a, sizes_a, data_a);
 
-      vector<float> data_b;
+      vector<T> data_b;
       ncn::read_data(filepath_b, varname_b, indices_b, sizes_b, data_b);
       
       return almost_equal_vectors(data_a, data_b, 2);
@@ -79,7 +77,13 @@ namespace ncn
       delete ncf;
    }
 
+   
    // explicitly instantiate the templates for every type we need
+   
+   template bool almost_equal_netcdf_data<float>(const std::string filepath_a, const std::string varname_a, const std::vector<size_t>& indices_a, const std::vector<size_t>& sizes_a, const std::string filepath_b, const std::string varname_b, const std::vector<size_t>& indices_b, const std::vector<size_t>& sizes_b);
+   template bool almost_equal_netcdf_data<double>(const std::string filepath_a, const std::string varname_a, const std::vector<size_t>& indices_a, const std::vector<size_t>& sizes_a, const std::string filepath_b, const std::string varname_b, const std::vector<size_t>& indices_b, const std::vector<size_t>& sizes_b);
+   
+   
    template void read_data(const std::string filepath, const std::string varname, const std::vector<size_t>& indices, const std::vector<size_t>& sizes, std::vector<float>& data);
    template void read_data(const std::string filepath, const std::string varname, const std::vector<size_t>& indices, const std::vector<size_t>& sizes, std::vector<double>& data);
 }
