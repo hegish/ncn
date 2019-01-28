@@ -4,7 +4,10 @@ project(ncn CXX)
 
 add_subdirectory(../lib ${PROJECT_BINARY_DIR}/ncn-lib)
 
-file(GLOB sources_CXX ${CMAKE_CURRENT_LIST_DIR}/*.cpp)
+file(GLOB sources_CXX ${CMAKE_CURRENT_LIST_DIR}/*.cpp ${CMAKE_CURRENT_LIST_DIR}/subcommand_line_interface/*.cpp)
 add_executable(${PROJECT_NAME} ${sources_CXX})
 target_link_libraries(${PROJECT_NAME} ncn-lib)
+target_include_directories(${PROJECT_NAME}
+	PRIVATE ${CMAKE_CURRENT_LIST_DIR}/subcommand_line_interface
+)
 target_compile_options(${PROJECT_NAME} PRIVATE -std=c++11)

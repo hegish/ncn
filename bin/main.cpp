@@ -1,7 +1,10 @@
 #include <iostream>
 #include "compare_netcdf.h"
+#include <sstream>
+#include "subcommand_line_interface.h"
 
 using namespace std;
+
 
 int compare_tos_thetao_command(const std::vector<std::string> args)
 {
@@ -23,18 +26,9 @@ int compare_tos_thetao_command(const std::vector<std::string> args)
 
 int main(int argc, const char * argv[])
 {
-   vector<string> args(argv+1, argv+argc); // without argv[0]
+   Subcommand &cli = Subcommand::instance();
+   
+   cli.add("compare_tos_thetao", compare_tos_thetao_command);
 
-   if(args.size() > 0)
-   {
-      vector<string> subargs(args.begin()+1, args.end());
-
-      if("compare_tos_thetao" == args[0])
-      {
-         return compare_tos_thetao_command(subargs);
-      }
-      
-   }
-
-   return 0;
+   return cli.execute(argc, argv);
 }
