@@ -17,7 +17,7 @@ int compare_tos_thetao_command(const std::vector<std::string> args)
    string varname_b = "thetao";
    vector<size_t> indices_b = {0,0,0};
    vector<size_t> sizes_b = {1,1,1};
-   bool eq = ncn::almost_equal_netcdf_data<float>(filepath_a, varname_a, indices_a, sizes_a, filepath_b, varname_b, indices_b, sizes_b);
+   bool eq = ncn::almost_equal_netcdf_data(filepath_a, varname_a, indices_a, sizes_a, filepath_b, varname_b, indices_b, sizes_b);
    
    cout<<"equal? "<<(eq?"yes":"no")<<endl;
    return eq? 0:1;

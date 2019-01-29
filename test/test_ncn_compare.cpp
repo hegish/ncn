@@ -44,6 +44,22 @@ namespace {
    }
    
    
+   TEST(ncn_compare, can_call_almost_equal_netcdf_data_explicit)
+   {
+      string filepath_a = fixture_dir+"/tos.nc";
+      std::string varname_a = "tos";
+      vector<size_t> indices_a = {0,0};
+      vector<size_t> sizes_a = {1,1};
+      
+      string filepath_b = fixture_dir+"/tos.nc";
+      string varname_b = "tos";
+      vector<size_t> indices_b = {0,0};
+      vector<size_t> sizes_b = {1,1};
+      bool eq = almost_equal_netcdf_data_explicit<float>(filepath_a, varname_a, indices_a, sizes_a, filepath_b, varname_b, indices_b, sizes_b);
+      EXPECT_TRUE(eq);
+   }
+
+
    TEST(ncn_compare, can_call_almost_equal_netcdf_data)
    {
       string filepath_a = fixture_dir+"/tos.nc";
@@ -55,7 +71,7 @@ namespace {
       string varname_b = "tos";
       vector<size_t> indices_b = {0,0};
       vector<size_t> sizes_b = {1,1};
-      bool eq = almost_equal_netcdf_data<float>(filepath_a, varname_a, indices_a, sizes_a, filepath_b, varname_b, indices_b, sizes_b);
+      bool eq = almost_equal_netcdf_data(filepath_a, varname_a, indices_a, sizes_a, filepath_b, varname_b, indices_b, sizes_b);
       EXPECT_TRUE(eq);
    }
 

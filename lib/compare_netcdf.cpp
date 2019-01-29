@@ -10,7 +10,27 @@ using namespace netCDF;
 
 namespace ncn
 {
-   template<typename T> bool almost_equal_netcdf_data(const std::string filepath_a, const std::string varname_a, const std::vector<size_t>& indices_a, const std::vector<size_t>& sizes_a, const std::string filepath_b, const std::string varname_b, const std::vector<size_t>& indices_b, const std::vector<size_t>& sizes_b)
+   bool almost_equal_netcdf_data(const std::string filepath_a, const std::string varname_a, const std::vector<size_t>& indices_a, const std::vector<size_t>& sizes_a, const std::string filepath_b, const std::string varname_b, const std::vector<size_t>& indices_b, const std::vector<size_t>& sizes_b)
+   {
+      const std::type_info& type = read_data_type(filepath_a, varname_a);
+      
+      // we do not have generics in C++
+      if(type == typeid(float))
+         return almost_equal_netcdf_data_explicit<float>(filepath_a, varname_a, indices_a, sizes_a, filepath_b, varname_b, indices_b, sizes_b);
+      else if(type == typeid(double))
+         return almost_equal_netcdf_data_explicit<double>(filepath_a, varname_a, indices_a, sizes_a, filepath_b, varname_b, indices_b, sizes_b);
+      else
+      {
+         std::stringstream msg;
+         msg<<__FILE__<<":"<<__LINE__<<" can not compare data for type  <"<<type.name()<<">";
+         throw std::runtime_error(msg.str());
+      }
+
+      return false;
+   }
+
+   
+   template<typename T> bool almost_equal_netcdf_data_explicit(const std::string filepath_a, const std::string varname_a, const std::vector<size_t>& indices_a, const std::vector<size_t>& sizes_a, const std::string filepath_b, const std::string varname_b, const std::vector<size_t>& indices_b, const std::vector<size_t>& sizes_b)
    {
       vector<T> data_a;
       ncn::read_data(filepath_a, varname_a, indices_a, sizes_a, data_a);
@@ -127,8 +147,8 @@ namespace ncn
    
    // explicitly instantiate the templates for every type we need
    
-   template bool almost_equal_netcdf_data<float>(const std::string filepath_a, const std::string varname_a, const std::vector<size_t>& indices_a, const std::vector<size_t>& sizes_a, const std::string filepath_b, const std::string varname_b, const std::vector<size_t>& indices_b, const std::vector<size_t>& sizes_b);
-   template bool almost_equal_netcdf_data<double>(const std::string filepath_a, const std::string varname_a, const std::vector<size_t>& indices_a, const std::vector<size_t>& sizes_a, const std::string filepath_b, const std::string varname_b, const std::vector<size_t>& indices_b, const std::vector<size_t>& sizes_b);
+   template bool almost_equal_netcdf_data_explicit<float>(const std::string filepath_a, const std::string varname_a, const std::vector<size_t>& indices_a, const std::vector<size_t>& sizes_a, const std::string filepath_b, const std::string varname_b, const std::vector<size_t>& indices_b, const std::vector<size_t>& sizes_b);
+   template bool almost_equal_netcdf_data_explicit<double>(const std::string filepath_a, const std::string varname_a, const std::vector<size_t>& indices_a, const std::vector<size_t>& sizes_a, const std::string filepath_b, const std::string varname_b, const std::vector<size_t>& indices_b, const std::vector<size_t>& sizes_b);
    
    
    template void read_data(const std::string filepath, const std::string varname, const std::vector<size_t>& indices, const std::vector<size_t>& sizes, std::vector<float>& data);
