@@ -12,6 +12,8 @@ class Subcommand
 {
 public:
    
+   typedef int(*CMD_FUNCTION)(const std::vector<std::string>);
+   
    static Subcommand& instance()
    {
       static Subcommand instance_;
@@ -20,10 +22,10 @@ public:
    Subcommand(Subcommand const&) = delete;
    void operator=(Subcommand const&) = delete;
 
-   void add(const std::string cmdname, int(*cmdptr)(const std::vector<std::string>))
+   void add(const std::string cmdname, CMD_FUNCTION cmdptr)
    {
-      std::pair<std::map<std::string, int(*)(std::vector<std::string>)>::iterator,bool> return_pair;
-      return_pair = commands.insert( std::map< std::string, int(*)(std::vector<std::string>) >::value_type(cmdname, cmdptr) );
+      std::pair<std::map<std::string, CMD_FUNCTION>::iterator,bool> return_pair;
+      return_pair = commands.insert( std::map< std::string, CMD_FUNCTION >::value_type(cmdname, cmdptr) );
       if(return_pair.second == false)
       {
          std::stringstream msg;
@@ -40,10 +42,10 @@ public:
          std::string cmdname = args[0];
          std::vector<std::string> subargs(args.begin()+1, args.end());
          
-         std::map<std::string, int(*)(std::vector<std::string>)>::iterator it = commands.find(cmdname);
+         std::map<std::string, CMD_FUNCTION>::iterator it = commands.find(cmdname);
          if(it != commands.end())
          {
-            int(*cmdptr)(std::vector<std::string>) = it->second;
+            CMD_FUNCTION cmdptr = it->second;
             return cmdptr(subargs);
          }
          else
@@ -70,7 +72,7 @@ private:
    : commands()
    {}
    
-   std::map<std::string, int(*)(std::vector<std::string>)> commands;
+   std::map<std::string, CMD_FUNCTION> commands;
 };
 
 #endif
