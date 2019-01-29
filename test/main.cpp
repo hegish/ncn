@@ -9,7 +9,7 @@ int main(int argc, char **argv)
    
    // set fixture dir from argv
    std::vector<std::string> args(argv+1, argv+argc);
-   assert(args.size() > 0);
+   assert(args.size() > 0 && "missing path to fixtures dir");
    fixture_dir = args[0];
    
    return RUN_ALL_TESTS();
