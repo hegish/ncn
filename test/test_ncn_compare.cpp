@@ -16,6 +16,13 @@ namespace {
       
       EXPECT_NO_THROW( ncn::read_data(fixture_dir+"/tos.nc", "tos", {0,0}, {1,1}, data) );
    }
+   
+   
+   TEST(ncn_compare, canreadtype)
+   {
+      const type_info& actual_type = read_data_type(fixture_dir+"/tos.nc", "tos");
+      EXPECT_EQ(typeid(float), actual_type);
+   }
 
 
    TEST(ncn_compare, canreadnetcdfdata)
