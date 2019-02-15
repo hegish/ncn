@@ -6,7 +6,7 @@
 
 namespace ncn
 {
-   void compute_time_bounds(const std::vector<double> &times, std::vector< std::vector<double> > &bounds);
+   void compute_time_bounds(const std::vector<double> &times, std::vector<double> &flat_bounds);
 }
 
 #endif
