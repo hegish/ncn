@@ -2,6 +2,7 @@
 #include "compare_netcdf.h"
 #include <sstream>
 #include "subcommand_line_interface.h"
+#include "insert_time_bounds.h"
 
 using namespace std;
 
@@ -24,11 +25,21 @@ int compare_tos_thetao_command(const std::vector<std::string> args)
 }
 
 
+int insert_time_bounds_command(const std::vector<std::string> args)
+{
+   string filepath = args[0];
+   ncn::insert_time_bounds(filepath);
+   
+   return 0;
+}
+
+
 int main(int argc, const char * argv[])
 {
    Subcommand &cli = Subcommand::instance();
    
    cli.add("compare_tos_thetao", compare_tos_thetao_command);
+   cli.add("insert_time_bounds", insert_time_bounds_command); // assume adjusted mean timestamps, i.e. time is in the middle of each mean interval
 
    return cli.execute(argc, argv);
 }
