@@ -9,14 +9,18 @@ file(GLOB sources_CXX ${CMAKE_CURRENT_LIST_DIR}/bin/*.cpp ${CMAKE_CURRENT_LIST_D
 add_executable(${PROJECT_NAME} ${sources_CXX})
 target_link_libraries(${PROJECT_NAME} ncn-lib)
 target_include_directories(${PROJECT_NAME}
-	PRIVATE ${CMAKE_CURRENT_LIST_DIR}/bin/subcommand_line_interface
+   PRIVATE ${CMAKE_CURRENT_LIST_DIR}/bin/subcommand_line_interface
 )
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 
 # test
 add_subdirectory(test/googletest_0a43962 ${PROJECT_BINARY_DIR}/gtest)
+include(${CMAKE_CURRENT_LIST_DIR}/cmake/FindNETCDF.cmake)
 
 file(GLOB sources_CXX ${CMAKE_CURRENT_LIST_DIR}/test/*.cpp)
 add_executable(${PROJECT_NAME}-tests ${sources_CXX})
-target_link_libraries(${PROJECT_NAME}-tests ncn-lib gtest)
+target_link_libraries(${PROJECT_NAME}-tests ncn-lib gtest ${NETCDF_CXX_LIBRARIES})
+target_include_directories(${PROJECT_NAME}-tests
+   PRIVATE ${NETCDF_CXX_INCLUDE_DIRECTORIES}
+)
 set_property(TARGET ${PROJECT_NAME}-tests PROPERTY CXX_STANDARD 11)

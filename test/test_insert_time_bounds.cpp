@@ -1,11 +1,13 @@
 #include "gtest/gtest.h"
 #include <stdlib.h>
+#include <netcdf>
 
 #include "globals.h"
 #include "insert_time_bounds.h"
 
 using namespace std;
 using namespace ncn;
+using namespace netCDF;
 
 namespace {
 
@@ -25,4 +27,30 @@ namespace {
       }
    }
    
+   
+   TEST(ncn_insert_time_bounds, can_insert_time_bounds)
+   {
+      string tmp_path = "./monthly_mean_time_days.nc.8DDD3690_F912_4C79_9F23_B13CAF6D0F86";
+      string cmd = "cp "+fixture_dir+"/monthly_mean_time_days.nc "+tmp_path;
+      system(cmd.c_str());
+      
+      EXPECT_NO_THROW( ncn::insert_time_bounds(tmp_path) );
+      
+      NcFile ncf(tmp_path, NcFile::read);
+      NcVar var = ncf.getVar("time_bnds");
+      EXPECT_EQ(2, var.getDimCount());
+      vector<double> bounds(var.getDim(0).getSize() * var.getDim(1).getSize());
+      var.getVar(&bounds[0]);
+
+      vector<double> exp_bounds = {0.0, 31.0, 31.0, 59.0, 59.0, 90.0, 90.0, 120.0, 120.0, 151.0, 151.0, 181.0, 181.0, 212.0, 212.0, 243.0, 243.0, 273.0, 273.0, 304.0, 304.0, 334.0, 334.0, 365.0};
+      EXPECT_EQ(exp_bounds.size(), bounds.size());
+      for(int i = 0; i < exp_bounds.size(); i++)
+      {
+         EXPECT_DOUBLE_EQ(exp_bounds[i], bounds[i]);
+      }
+
+      cmd = "rm "+tmp_path;
+      system(cmd.c_str());
+   }
+
 }  // namespace

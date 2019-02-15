@@ -6,6 +6,7 @@
 
 namespace ncn
 {
+   void insert_time_bounds(const std::string filepath);
    void compute_time_bounds(const std::vector<double> &times, std::vector<double> &flat_bounds);
 }
 

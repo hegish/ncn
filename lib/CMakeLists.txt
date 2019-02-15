@@ -9,7 +9,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../cmake/FindNETCDF.cmake)
 add_library(${PROJECT_NAME} ${sources_CXX})
 target_link_libraries(${PROJECT_NAME} ${NETCDF_CXX_LIBRARIES})
 target_include_directories(${PROJECT_NAME}
-	INTERFACE ${CMAKE_CURRENT_LIST_DIR}
-	PRIVATE ${NETCDF_CXX_INCLUDE_DIRECTORIES}
+   INTERFACE ${CMAKE_CURRENT_LIST_DIR}
+   PRIVATE ${NETCDF_CXX_INCLUDE_DIRECTORIES} # we do not expose the netcdf API, so we do not need to forward the include dir
 )
 target_compile_options(${PROJECT_NAME} PRIVATE -std=c++11)
