@@ -59,19 +59,20 @@ namespace ncn
       
       vector<NcDim> transposed_dims = {dims[0], dim_b, dim_a};
       NcVar transposed_var = outfile.addVar(var.getName(), var.getType(), transposed_dims);
-
-      for(size_t i = 0; i < dim_b.getSize(); i++)
+      for(size_t t = 0; t < dims[0].getSize(); t++)
       {
-         vector<float> data(dim_a.getSize());
-         vector<size_t> indices = {0,0,0+i};
-         vector<size_t> sizes = {1, dim_a.getSize(), 1};
-         var.getVar(indices, sizes, &data[0]);
-         
-         vector<size_t> indicesT = {0,0+i,0};
-         vector<size_t> sizesT = {1, 1, dim_a.getSize()};
-         transposed_var.putVar(indicesT, sizesT, &data[0]);
+         for(size_t i = 0; i < dim_b.getSize(); i++)
+         {
+            vector<float> data(dim_a.getSize());
+            vector<size_t> indices = {0+t,0,0+i};
+            vector<size_t> sizes = {1, dim_a.getSize(), 1};
+            var.getVar(indices, sizes, &data[0]);
+            
+            vector<size_t> indicesT = {0+t,0+i,0};
+            vector<size_t> sizesT = {1, 1, dim_a.getSize()};
+            transposed_var.putVar(indicesT, sizesT, &data[0]);
+         }
       }
-
       delete ncf;
    }
 }
