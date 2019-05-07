@@ -19,7 +19,7 @@ namespace {
       string inpath = fixture_dir+"/transpose.nc";
       string outpath = "./transpose.nc.2A1F0DB9_BA11_4321_8666_1A232DEC6B30";
 
-      ncn::transpose_netcdf_dimensions(inpath, outpath, "temp", {"nod2", "nz1"}); // time, nod2, nz1 => time, nz1, nod2
+      ncn::transpose_netcdf_dimensions(inpath, outpath, "temp", {"time", "nz1", "nod2"}); // time, nod2, nz1 => time, nz1, nod2
 
       NcFile ncf(outpath, NcFile::read);
       NcVar var = ncf.getVar("temp");

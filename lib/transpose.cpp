@@ -8,7 +8,7 @@ using namespace netCDF;
 
 namespace ncn
 {
-   void transpose_netcdf_dimensions(const std::string inpath, const std::string outpath, const std::string varname, const std::vector<std::string>& transpose_dimnames)
+   void transpose_netcdf_dimensions(const std::string inpath, const std::string outpath, const std::string varname, const std::vector<std::string>& transposed_dimnames)
    {      
       NcFile *ncf; // use pointer so we can wrap the instantiation in a try catch block
       try
@@ -30,46 +30,53 @@ namespace ncn
          throw std::runtime_error(msg.str());
       }
       
-      // get hold of the dims we should transpose
+      // get hold of the dims given as dimnames
       vector<NcDim> dims = var.getDims();
-      NcDim dim_a;
-      NcDim dim_b;
-      for(int i = 0; i < dims.size(); i++)
+      if(dims.size() != transposed_dimnames.size())
       {
-         NcDim d = dims[i];
-         if(d.getName() == transpose_dimnames[0])
+         std::stringstream msg;
+         msg<<__FILE__<<":"<<__LINE__<<" number of dimensions do not match, input has <"<<dims.size()<<">, output should have <"<<transposed_dimnames.size()<<"> for variable <"<<varname<<"> of file <"<<inpath<<">";
+         throw std::runtime_error(msg.str());
+      }
+
+      vector<NcDim> transposed_dims;
+      for(const string n : transposed_dimnames)
+      {
+         // find dim with this name
+         for(size_t i = 0; i < dims.size(); i++)
          {
-            dim_a = d;
-            d = dims[i+1];
-            if(d.getName() != transpose_dimnames[1])
+            NcDim d = dims[i];
+            if(d.getName() == n)
+            {
+               transposed_dims.push_back(d);
+               break;
+            }
+            else if(i == dims.size()-1)
             {
                std::stringstream msg;
-               msg<<__FILE__<<":"<<__LINE__<<" second dim <"<<transpose_dimnames[1]<<"> does not follow first dim <"<<transpose_dimnames[0]<<"> <"<<inpath<<">";
+               msg<<__FILE__<<":"<<__LINE__<<" can not find dimension <"<<n<<"> for variable <"<<varname<<"> of file <"<<inpath<<">";
                throw std::runtime_error(msg.str());
             }
-            dim_b = d;
-            break;
          }
       }
       
-      NcFile outfile(outpath, NcFile::replace);
-      
+      NcFile outfile(outpath, NcFile::newFile);
+      // copy over the dims
       for(NcDim d : dims)
          outfile.addDim(d.getName(), d.getSize());
       
-      vector<NcDim> transposed_dims = {dims[0], dim_b, dim_a};
       NcVar transposed_var = outfile.addVar(var.getName(), var.getType(), transposed_dims);
       for(size_t t = 0; t < dims[0].getSize(); t++)
       {
-         for(size_t i = 0; i < dim_b.getSize(); i++)
+         for(size_t i = 0; i < transposed_dims[1].getSize(); i++)
          {
-            vector<float> data(dim_a.getSize());
+            vector<float> data(transposed_dims[2].getSize());
             vector<size_t> indices = {0+t,0,0+i};
-            vector<size_t> sizes = {1, dim_a.getSize(), 1};
+            vector<size_t> sizes = {1, transposed_dims[2].getSize(), 1};
             var.getVar(indices, sizes, &data[0]);
             
             vector<size_t> indicesT = {0+t,0+i,0};
-            vector<size_t> sizesT = {1, 1, dim_a.getSize()};
+            vector<size_t> sizesT = {1, 1, transposed_dims[2].getSize()};
             transposed_var.putVar(indicesT, sizesT, &data[0]);
          }
       }
