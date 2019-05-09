@@ -11,6 +11,8 @@ using namespace std;
 
 int compare_tos_thetao_command(const std::vector<std::string> args)
 {
+   Subcommand::ensure_args(2, args);
+   
    string filepath_a = args[0];
    std::string varname_a = "tos";
    vector<size_t> indices_a = {0,0};
@@ -29,6 +31,8 @@ int compare_tos_thetao_command(const std::vector<std::string> args)
 
 int insert_time_bounds_command(const std::vector<std::string> args)
 {
+   Subcommand::ensure_args(1, args);
+   
    string filepath = args[0];
    ncn::insert_time_bounds(filepath);
    
@@ -38,6 +42,8 @@ int insert_time_bounds_command(const std::vector<std::string> args)
 
 int mean_timestamp_adjust_command(const std::vector<std::string> args)
 {
+   Subcommand::ensure_args(1, args);
+
    for(string filepath : args)
       ncn::mean_timestamp_adjust(filepath);
    
@@ -47,6 +53,8 @@ int mean_timestamp_adjust_command(const std::vector<std::string> args)
 
 int transpose_command(const std::vector<std::string> args)
 {
+   Subcommand::ensure_args(4, args);
+   
    string inpath = args[0];
    string varname = args[1];
    vector<string> transpodes_dimnames(args.begin()+2, args.end()-1);

@@ -12,6 +12,8 @@ class Subcommand
 {
 public:
    
+   static void ensure_args(const size_t expected_arg_count, const std::vector<std::string> actual_args);
+   
    typedef int(*CMD_FUNCTION)(const std::vector<std::string>);
    
    static Subcommand& instance()

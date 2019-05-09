@@ -2,6 +2,23 @@
 
 using namespace std;
 
+
+void Subcommand::ensure_args(const size_t expected_arg_count, const std::vector<std::string> actual_args)
+{
+   if(expected_arg_count > actual_args.size())
+   {
+      std::stringstream msg;
+      msg<<__FILE__<<":"<<__LINE__<<" expecting <"<<expected_arg_count<<"> args but got <";
+      for(size_t i = 0; i < actual_args.size()-1; i++)
+         msg<<actual_args[i]<<", ";
+      if(actual_args.size() > 0)
+         msg<<actual_args.back();
+      msg<<"> ("<<actual_args.size()<<")";
+      throw std::runtime_error(msg.str());
+   }
+}
+
+
 void Subcommand::add(const std::string cmdname, CMD_FUNCTION cmdptr)
 {
    std::pair<std::map<std::string, CMD_FUNCTION>::iterator,bool> return_pair;
