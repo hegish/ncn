@@ -67,6 +67,27 @@ namespace ncn
       for(const NcDim d : dims)
          outfile.addDim(d.getName(), d.getSize());
       
+      multimap<string, NcVar> vars = ncf->getVars();
+      for (multimap<string, NcVar>::iterator it = vars.begin(); it != vars.end(); ++it)
+      {
+         string n = it->first;
+         NcVar src_var = it->second;
+         if(n == varname)
+         {}
+         else
+         {
+            // copy over the other variables
+            vector<NcDim> src_dims = src_var.getDims();
+            NcVar dst_var = outfile.addVar(n, src_var.getType(), src_dims);
+            size_t var_size = 0;
+            for(NcDim d : src_dims)
+               var_size += d.getSize();
+            vector<double> data(var_size); // TODO: make type generic
+            src_var.getVar(&data[0]);
+            dst_var.putVar(&data[0]);
+         }
+      }
+      
       NcVar transposed_var = outfile.addVar(var.getName(), var.getType(), transposed_dims);
 
       if( (vector<size_t>){0,2,1} == transposed_dims_indices )
@@ -76,7 +97,7 @@ namespace ncn
          {
             for(size_t i = 0; i < transposed_dims[1].getSize(); i++)
             {
-               vector<float> data(transposed_dims[2].getSize());
+               vector<float> data(transposed_dims[2].getSize()); // TODO: make type generic
                vector<size_t> indices = {t,0,i};
                vector<size_t> sizes = {1, transposed_dims[2].getSize(), 1};
                var.getVar(indices, sizes, &data[0]);

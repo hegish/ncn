@@ -34,6 +34,17 @@ namespace {
          EXPECT_FLOAT_EQ(exp_data[i], data[i]);
       }
 
+      NcVar tvar = ncf.getVar("time");
+      EXPECT_EQ(1, tvar.getDimCount());
+      vector<double> tdata(tvar.getDim(0).getSize());
+      tvar.getVar(&tdata[0]);
+      
+      vector<double> exp_tdata = {31533600.0, 63067200.0};
+      EXPECT_EQ(exp_tdata.size(), tdata.size());
+      for(int i = 0; i < exp_tdata.size(); i++)
+      {
+         EXPECT_DOUBLE_EQ(exp_tdata[i], tdata[i]);
+      }
       string cmd = "rm "+outpath;
       system(cmd.c_str());
    }
