@@ -40,6 +40,7 @@ namespace ncn
       }
 
       vector<NcDim> transposed_dims;
+      vector<size_t> transposed_dims_indices;
       for(const string n : transposed_dimnames)
       {
          // find dim with this name
@@ -49,6 +50,7 @@ namespace ncn
             if(d.getName() == n)
             {
                transposed_dims.push_back(d);
+               transposed_dims_indices.push_back(i);
                break;
             }
             else if(i == dims.size()-1)
@@ -62,24 +64,41 @@ namespace ncn
       
       NcFile outfile(outpath, NcFile::newFile);
       // copy over the dims
-      for(NcDim d : dims)
+      for(const NcDim d : dims)
          outfile.addDim(d.getName(), d.getSize());
       
       NcVar transposed_var = outfile.addVar(var.getName(), var.getType(), transposed_dims);
-      for(size_t t = 0; t < dims[0].getSize(); t++)
+
+      if( (vector<size_t>){0,2,1} == transposed_dims_indices )
       {
-         for(size_t i = 0; i < transposed_dims[1].getSize(); i++)
+         // this is not generic, but only for the case of three dimensions of which the last two are being swapped (i.e. 0,2,1)
+         for(size_t t = 0; t < dims[0].getSize(); t++)
          {
-            vector<float> data(transposed_dims[2].getSize());
-            vector<size_t> indices = {0+t,0,0+i};
-            vector<size_t> sizes = {1, transposed_dims[2].getSize(), 1};
-            var.getVar(indices, sizes, &data[0]);
-            
-            vector<size_t> indicesT = {0+t,0+i,0};
-            vector<size_t> sizesT = {1, 1, transposed_dims[2].getSize()};
-            transposed_var.putVar(indicesT, sizesT, &data[0]);
+            for(size_t i = 0; i < transposed_dims[1].getSize(); i++)
+            {
+               vector<float> data(transposed_dims[2].getSize());
+               vector<size_t> indices = {t,0,i};
+               vector<size_t> sizes = {1, transposed_dims[2].getSize(), 1};
+               var.getVar(indices, sizes, &data[0]);
+
+               vector<size_t> indicesT = {t,i,0};
+               vector<size_t> sizesT = {1, 1, transposed_dims[2].getSize()};
+               transposed_var.putVar(indicesT, sizesT, &data[0]);
+            }
          }
       }
+      else
+      {
+         std::stringstream msg;
+         msg<<__FILE__<<":"<<__LINE__<<" can not transpose to <";
+         for(size_t i = 0; i < transposed_dims_indices.size()-1; i++)
+            msg<<transposed_dims_indices[i]<<", ";
+         if(transposed_dims_indices.size() > 0)
+            msg<<transposed_dims_indices.back();
+         msg<<"> for variable <"<<varname<<"> of file <"<<inpath<<">";
+         throw std::runtime_error(msg.str());
+      }
+
       delete ncf;
    }
 }
