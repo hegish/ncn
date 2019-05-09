@@ -2,6 +2,7 @@
 #define transpose_5BAB4E7A_6851_4951_A161_53C4B2EF392C
 
 #include <string>
+#include <vector>
 
 namespace ncn
 {
