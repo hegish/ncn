@@ -5,6 +5,6 @@
 
 namespace ncn
 {
-   void transpose_netcdf_dimensions(const std::string inpath, const std::string outpath, const std::string varname, const std::vector<std::string>& transposed_dimnames);
+   void transpose_netcdf_dimensions(const std::string inpath, const std::string varname, const std::vector<std::string>& transposed_dimnames, const std::string outpath);
 }
 #endif

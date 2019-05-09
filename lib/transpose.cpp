@@ -8,7 +8,7 @@ using namespace netCDF;
 
 namespace ncn
 {
-   void transpose_netcdf_dimensions(const std::string inpath, const std::string outpath, const std::string varname, const std::vector<std::string>& transposed_dimnames)
+   void transpose_netcdf_dimensions(const std::string inpath, const std::string varname, const std::vector<std::string>& transposed_dimnames, const std::string outpath)
    {      
       NcFile *ncf; // use pointer so we can wrap the instantiation in a try catch block
       try
