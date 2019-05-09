@@ -4,6 +4,7 @@
 #include "subcommand_line_interface.h"
 #include "insert_time_bounds.h"
 #include "mean_timestamp_adjust.h"
+#include "transpose.h"
 
 using namespace std;
 
@@ -39,6 +40,18 @@ int mean_timestamp_adjust_command(const std::vector<std::string> args)
 {
    for(string filepath : args)
       ncn::mean_timestamp_adjust(filepath);
+   
+   return 0;
+}
+
+
+int transpose_command(const std::vector<std::string> args)
+{
+   string inpath = args[0];
+   string varname = args[1];
+   vector<string> transpodes_dimnames(args.begin()+2, args.end()-1);
+   string outpath = args.back();
+   ncn::transpose_netcdf_dimensions(inpath, varname, transpodes_dimnames, outpath);
 
    return 0;
 }
@@ -51,6 +64,7 @@ int main(int argc, const char * argv[])
    cli.add("compare_tos_thetao", compare_tos_thetao_command);
    cli.add("mean_timestamp_adjust", mean_timestamp_adjust_command);
    cli.add("insert_time_bounds", insert_time_bounds_command); // assume adjusted mean timestamps, i.e. time is in the middle of each mean interval
+   cli.add("transpose", transpose_command);
 
    return cli.execute(argc, argv);
 }
