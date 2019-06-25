@@ -8,7 +8,7 @@ namespace ncn
    // returns the first index whose data value is not bigger than the value before
    size_t increases(std::vector<double> &data)
    {
-      for(size_t i = 0; i < data.size()-1; i++)
+      for(size_t i = 0; i+1 < data.size(); i++)
       {
          if((i+1) < (data.size()))
          {
