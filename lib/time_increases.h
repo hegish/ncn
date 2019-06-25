@@ -7,6 +7,7 @@
 namespace ncn
 {
    size_t increases(std::vector<double> &data);
+   bool check_time_increases(const std::string filepath);
 }
 
 #endif

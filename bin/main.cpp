@@ -5,6 +5,7 @@
 #include "insert_time_bounds.h"
 #include "mean_timestamp_adjust.h"
 #include "transpose.h"
+#include "time_increases.h"
 
 using namespace std;
 
@@ -65,6 +66,18 @@ int transpose_command(const std::vector<std::string> args)
 }
 
 
+int check_time_increases_command(const std::vector<std::string> args)
+{
+   Subcommand::ensure_args(1, args);
+   
+   bool allok = true;
+   for(string filepath : args)
+      allok = allok & ncn::check_time_increases(filepath);
+   
+   return allok ? 0 : 1;
+}
+
+
 int main(int argc, const char * argv[])
 {
    Subcommand &cli = Subcommand::instance();
@@ -73,6 +86,7 @@ int main(int argc, const char * argv[])
    cli.add("mean_timestamp_adjust", mean_timestamp_adjust_command);
    cli.add("insert_time_bounds", insert_time_bounds_command); // assume adjusted mean timestamps, i.e. time is in the middle of each mean interval
    cli.add("transpose", transpose_command);
+   cli.add("check_time_increases", check_time_increases_command);
 
    return cli.execute(argc, argv);
 }
