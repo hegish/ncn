@@ -6,7 +6,7 @@
 
 namespace ncn
 {
-   bool increases(std::vector<double> &data);
+   size_t increases(std::vector<double> &data);
 }
 
 #endif
