@@ -41,7 +41,7 @@ namespace ncn
 
       vector<NcDim> transposed_dims;
       vector<size_t> transposed_dims_indices;
-      for(const string n : transposed_dimnames)
+      for(const string& n : transposed_dimnames)
       {
          // find dim with this name
          for(size_t i = 0; i < dims.size(); i++)
@@ -64,7 +64,7 @@ namespace ncn
       
       NcFile outfile(outpath, NcFile::newFile);
       // copy over the dims
-      for(const NcDim d : dims)
+      for(const NcDim& d : dims)
          outfile.addDim(d.getName(), d.getSize());
       
       multimap<string, NcVar> vars = ncf->getVars();
