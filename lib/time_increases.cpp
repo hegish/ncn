@@ -37,10 +37,8 @@ namespace ncn
       if(times.empty()) throw std::runtime_error("time has no values <"+filepath+">");
 
       size_t error_index = increases(times);
-      if(0 == error_index)
-         cout<<fixed<<"OK "<<filepath<<"\n";
-      else
-         cout<<fixed<<"!! decrease: ["<<error_index-1<<"] "<<times[error_index-1]<<", ["<<error_index<<"] "<<times[error_index]<<" "<<filepath<<"\n";
+      if(0 != error_index)
+         cout<<fixed<<"decrease: ["<<error_index-1<<"] "<<times[error_index-1]<<", ["<<error_index<<"] "<<times[error_index]<<" "<<filepath<<"\n";
       
       return 0 == error_index;
    }
