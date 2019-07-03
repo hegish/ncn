@@ -85,4 +85,19 @@ namespace ncn
       return 0;
    }
 
+
+   void report_tail_zeros(const std::string filepath)
+   {
+      NcFile ncf(filepath, NcFile::read);
+      
+      multimap<string, NcVar> vars = ncf.getVars();
+      for(multimap<string, NcVar>::iterator it = vars.begin(); it != vars.end(); ++it)
+      {
+         NcVar var = it->second;
+         size_t zeros_count = number_of_tail_zeros(var);
+         if(zeros_count > 0)
+            cout<<zeros_count<<" zero values at end of '"<<var.getName()<<"' "<<filepath<<endl;
+      }
+   }
+
 }

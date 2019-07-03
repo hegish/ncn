@@ -7,6 +7,7 @@
 namespace ncn
 {
    size_t number_of_tail_zeros(const std::string filepath, const std::string varname);
+   void report_tail_zeros(const std::string filepath);
 }
 
 #endif
