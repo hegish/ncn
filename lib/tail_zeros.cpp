@@ -28,12 +28,19 @@ namespace ncn
    }
    
    
+   bool value_is_zero(const netCDF::NcVar& var, const std::vector<size_t>& indices)
+   {
+      float value;
+      var.getVar(indices, &value);
+      return almost_equal(0.0F, value, 2);
+   }
+   
+   
    size_t number_of_tail_zeros(const NcVar& var)
    {
       vector<NcDim> dims = var.getDims();
       
       size_t zeros_count = 0;
-      float value;
       vector<size_t> dim_sizes(dims.size());
       for(int i = 0; i < dim_sizes.size(); i++)
          dim_sizes[i] = dims[i].getSize();
@@ -47,8 +54,7 @@ namespace ncn
       int current_dim_index = dim_sizes.size()-1;
       for(int i = 0; i < total_size; i++)
       {
-         var.getVar(indices, &value);
-         if(almost_equal(0.0F, value, 2))
+         if(value_is_zero(var, indices))
             zeros_count ++;
          else
             break;
@@ -73,7 +79,7 @@ namespace ncn
          throw std::runtime_error(msg.str());
       }
       
-      return number_of_tail_zeros(var);      
+      return number_of_tail_zeros(var);
    }
 
 
