@@ -3,6 +3,7 @@
 #include "almost_equal.h"
 #include <numeric>
 #include <sstream>
+#include "netcdf_utils.h"
 
 
 using namespace std;
@@ -30,9 +31,26 @@ namespace ncn
    
    bool value_is_zero(const netCDF::NcVar& var, const std::vector<size_t>& indices)
    {
-      float value;
-      var.getVar(indices, &value);
-      return almost_equal(0.0F, value, 2);
+      const type_info& type = plain_type_for_nctype(var.getType());
+
+      if(type == typeid(float))
+      {
+         float value;
+         var.getVar(indices, &value);
+         return almost_equal(0.0F, value, 2);
+      }
+      else if(type == typeid(double))
+      {
+         double value;
+         var.getVar(indices, &value);
+         return almost_equal(0.0, value, 2);
+      }
+      else
+      {
+         std::stringstream msg;
+         msg<<__FILE__<<":"<<__LINE__<<" no strategy here for type  <"<<type.name()<<">";
+         throw std::runtime_error(msg.str());
+      }
    }
    
    
