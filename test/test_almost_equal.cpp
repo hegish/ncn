@@ -75,4 +75,12 @@ namespace {
       EXPECT_FALSE(almost_equal(2.0e30F, 2.0e-30F, 2));
    }
    
+   
+   TEST(ncn_almostequal, can_be_compared_to_zero)
+   {
+      EXPECT_TRUE(almost_equal(0.0, 0.0, 2));
+      EXPECT_TRUE(almost_equal(0.0F, 0.0F, 2));
+      EXPECT_TRUE(almost_equal(0.0L, 0.0L, 2));
+   }
+
 }  // namespace
