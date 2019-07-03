@@ -6,6 +6,7 @@
 #include "mean_timestamp_adjust.h"
 #include "transpose.h"
 #include "time_increases.h"
+#include "tail_zeros.h"
 
 using namespace std;
 
@@ -78,6 +79,17 @@ int check_time_increases_command(const std::vector<std::string> args)
 }
 
 
+int report_tail_zeros_command(const std::vector<std::string> args)
+{
+   Subcommand::ensure_args(1, args);
+   
+   for(string filepath : args)
+      ncn::report_tail_zeros(filepath);
+   
+   return 0;
+}
+
+
 int main(int argc, const char * argv[])
 {
    Subcommand &cli = Subcommand::instance();
@@ -87,6 +99,7 @@ int main(int argc, const char * argv[])
    cli.add("insert_time_bounds", insert_time_bounds_command); // assume adjusted mean timestamps, i.e. time is in the middle of each mean interval
    cli.add("transpose", transpose_command);
    cli.add("check_time_increases", check_time_increases_command);
+   cli.add("report_tail_zeros", report_tail_zeros_command);
 
    return cli.execute(argc, argv);
 }
