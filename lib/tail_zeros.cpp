@@ -64,25 +64,16 @@ namespace ncn
    {
       NcFile ncf(filepath, NcFile::read);
       
-      set<NcVar> vars = ncf.getVars(varname);
+      NcVar var = ncf.getVar(varname);
       
-      if(vars.size() == 0)
+      if(var.isNull())
       {
          std::stringstream msg;
          msg<<__FILE__<<":"<<__LINE__<<" can not find variable <"<<varname<<"> in file <"<<filepath<<">";
          throw std::runtime_error(msg.str());
       }
-      if(vars.size() > 1)
-      {
-         std::stringstream msg;
-         msg<<__FILE__<<":"<<__LINE__<<" can not continue with multiple ("<<vars.size()<<") variables named <"<<varname<<"> in file <"<<filepath<<">";
-         throw std::runtime_error(msg.str());
-      }
       
-      for(NcVar var : vars)
-         return number_of_tail_zeros(var);
-      
-      return 0;
+      return number_of_tail_zeros(var);      
    }
 
 
