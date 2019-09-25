@@ -90,6 +90,16 @@ int report_tail_zeros_command(const std::vector<std::string> args)
 }
 
 
+int help_command(const std::vector<std::string> args)
+{
+   Subcommand::ensure_args(0, args);
+   
+   cout<<"ncn - modify netcdf files in-place and more. For questions and suggestions, please mail to: Jan Hegewald <jan.hegewald@awi.de>"<<endl;
+   
+   return 0;
+}
+
+
 int main(int argc, const char * argv[])
 {
    Subcommand &cli = Subcommand::instance();
@@ -100,6 +110,7 @@ int main(int argc, const char * argv[])
    cli.add("transpose", transpose_command);
    cli.add("check_time_increases", check_time_increases_command);
    cli.add("report_tail_zeros", report_tail_zeros_command);
+   cli.add("help", help_command);
 
    return cli.execute(argc, argv);
 }
