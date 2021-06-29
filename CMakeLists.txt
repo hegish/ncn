@@ -11,7 +11,11 @@ target_link_libraries(${PROJECT_NAME} ncn-lib)
 target_include_directories(${PROJECT_NAME}
    PRIVATE ${CMAKE_CURRENT_LIST_DIR}/bin/subcommand_line_interface
 )
-set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL Cray )
+   target_compile_options(${PROJECT_NAME} PRIVATE -hstd=c++11)
+else()
+   set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11) # does not work for cray: sets "-std=c++11" for the crayc++ compiler, which needs to have "-hstd=c++11"
+endif()
 
 # test
 add_subdirectory(test/googletest_0a43962 ${PROJECT_BINARY_DIR}/gtest)
@@ -23,4 +27,8 @@ target_link_libraries(${PROJECT_NAME}-tests ncn-lib gtest ${NETCDF_CXX_LIBRARIES
 target_include_directories(${PROJECT_NAME}-tests
    PRIVATE ${NETCDF_CXX_INCLUDE_DIRECTORIES}
 )
-set_property(TARGET ${PROJECT_NAME}-tests PROPERTY CXX_STANDARD 11)
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL Cray )
+   target_compile_options(${PROJECT_NAME}-tests PRIVATE -hstd=c++11)
+else()
+   set_property(TARGET ${PROJECT_NAME}-tests PROPERTY CXX_STANDARD 11) # does not work for cray: sets "-std=c++11" for the crayc++ compiler, which needs to have "-hstd=c++11"
+endif()
