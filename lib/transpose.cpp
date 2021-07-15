@@ -97,7 +97,7 @@ namespace ncn
          {
             for(size_t i = 0; i < transposed_dims[1].getSize(); i++)
             {
-               vector<float> data(transposed_dims[2].getSize()); // TODO: make type generic
+               vector<double> data(transposed_dims[2].getSize()); // TODO: make type generic
                vector<size_t> indices = {t,0,i};
                vector<size_t> sizes = {1, transposed_dims[2].getSize(), 1};
                var.getVar(indices, sizes, &data[0]);
