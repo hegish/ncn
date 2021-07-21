@@ -65,7 +65,12 @@ namespace ncn
       NcFile outfile(outpath, NcFile::newFile);
       // copy over the dims
       for(const NcDim& d : dims)
-         outfile.addDim(d.getName(), d.getSize());
+      {
+         if(d.isUnlimited())
+            outfile.addDim(d.getName()); // unlimited dim
+         else
+            outfile.addDim(d.getName(), d.getSize());
+      }
       
       multimap<string, NcVar> vars = ncf->getVars();
       for (multimap<string, NcVar>::iterator it = vars.begin(); it != vars.end(); ++it)
@@ -84,7 +89,9 @@ namespace ncn
                var_size += d.getSize();
             vector<double> data(var_size); // TODO: make type generic
             src_var.getVar(&data[0]);
-            dst_var.putVar(&data[0]);
+            vector<size_t> indices = {0};
+            vector<size_t> sizes = {1};
+            dst_var.putVar(indices, sizes, &data[0]); // explicitly set indices and sizes, otherwise the values will not be *added* to an unlimited dim
          }
       }
       
