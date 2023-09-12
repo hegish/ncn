@@ -1,0 +1,34 @@
+#%Module1.0
+
+proc ModulesHelp { } {
+  puts stderr "ncn 1.0"
+}
+module-whatis "ncn 1.0"
+
+conflict ncn
+
+
+
+# with the default awi-cm settings we load an oldish netcdf-cxx-4.2.1 lib which causes the error "NcInDefineMode: Operation not allowed in define mode"
+# this has been repored to DKRZ and they installed netcdf-cxx-4.3.0
+# if we just update the NETCDF_CXX_INCLUDE_DIRECTORIES, we get duplicate symbols as our loaded netcdf_c-4.3.2-intel14 puts another libnetcdf.so in the rpath
+# if we call
+#   objdump -x /sw/rhel6-x64/netcdf/netcdf_cxx-4.3.0-gcc64/lib/libnetcdf_c++4.so.1.0.3 |grep RPATH
+# we see that it has gcc-6.4.0 and netcdf_c-4.5.0-gcc64 in the rpath, so we use netcdf_c-4.5.0-gcc64 to make sure we do not have libnetcdf twice
+# we also need a newer c++ compiler, gcc-4.8.2 seems to be too old. gcc-6.4 works
+
+#source /sw/rhel6-x64/etc/profile.mistral
+
+# ncn
+prepend-path PATH /work/bk0988/a270076/shared/bin/ncn_build
+#
+prepend-path LD_LIBRARY_PATH "/sw/rhel6-x64/gcc/gcc-6.4.0/lib64" # avoid GLIBCXX not found error
+#module load gcc/6.4.0
+# module load intel/17.0.2
+# setenv FC mpif90
+# setenv CC mpicc
+# setenv CXX mpicxx
+# module load mxm/3.3.3002 bullxmpi_mlx/bullxmpi_mlx-1.2.8.3
+# module load cmake
+# setenv NETCDF_C_INCLUDE_DIRECTORIES=/sw/rhel6-x64/netcdf/netcdf_c-4.5.0-gcc64/include
+# setenv NETCDF_CXX_INCLUDE_DIRECTORIES=/sw/rhel6-x64/netcdf/netcdf_cxx-4.3.0-gcc64/include
