@@ -23,7 +23,16 @@ transpose
 
 # Build notes
 
-```
-cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release /path/ncn_src/
-make
-```
+1. If the current platform is included in `env/<plaform_dir>` and contains a `shell`
+   script, then you can use:
+   ```
+   source env.sh
+   ```
+   Otherwise, try to setup the correct environment for the current platform taking as an
+   example `env/albedo/shell`
+
+2. Execute:
+   ```
+   cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release /path/ncn_src/
+   make
+   ```
